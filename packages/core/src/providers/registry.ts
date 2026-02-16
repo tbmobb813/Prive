@@ -50,34 +50,37 @@ export class ProviderRegistry {
 
   /**
    * Create a registry with all default providers
+   * Attempts to register all built-in providers, silently skipping those that fail
+   * (e.g., due to missing API keys or unavailable services)
    */
   static createDefault(): ProviderRegistry {
     const registry = new ProviderRegistry();
     
     // Register all built-in providers with default configs
     // Note: Actual API keys must be provided when using them
+    // Providers that fail to initialize (missing keys, etc.) are silently skipped
     try {
       registry.register(new OpenAIProvider({ type: 'openai' }));
-    } catch {
-      // Provider might require API key
+    } catch (error) {
+      // Provider might require API key - skip if not available
     }
     
     try {
       registry.register(new AnthropicProvider({ type: 'anthropic' }));
-    } catch {
-      // Provider might require API key
+    } catch (error) {
+      // Provider might require API key - skip if not available
     }
     
     try {
       registry.register(new GeminiProvider({ type: 'gemini' }));
-    } catch {
-      // Provider might require API key
+    } catch (error) {
+      // Provider might require API key - skip if not available
     }
     
     try {
       registry.register(new OllamaProvider({ type: 'ollama' }));
-    } catch {
-      // Ollama might not be running
+    } catch (error) {
+      // Ollama might not be running - skip if not available
     }
     
     return registry;
